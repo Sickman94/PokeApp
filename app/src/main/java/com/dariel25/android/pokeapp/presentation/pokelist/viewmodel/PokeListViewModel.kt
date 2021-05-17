@@ -30,7 +30,7 @@ class PokeListViewModel(private val pokemonsUseCase: PokemonsUseCase) : ViewMode
         mutableViewState.value = ViewState.loading()
 
         viewModelScope.launch {
-            when (val networkStatus = pokemonsUseCase.getPokemonListWithTypes()) {
+            when (val networkStatus = pokemonsUseCase.getPokemonList()) {
                 is ResponseState.Success -> {
                     mutableViewState.value = ViewState.success(networkStatus.data)
                 }

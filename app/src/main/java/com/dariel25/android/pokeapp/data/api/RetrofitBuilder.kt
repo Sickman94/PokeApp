@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitBuilder {
 
-    private const val BASE_URL = "http://pokeapi.co/api/v2/"
+    private const val BASE_URL = "https://raw.githubusercontent.com/Sickman94/PokeApp/main/"
 
     fun <T> createRepositoryApi(service: Class<T>): T {
         return getRetrofit().create(service)

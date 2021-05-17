@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.dariel25.android.pokeapp.R
 import com.dariel25.android.pokeapp.domain.model.PokemonSimple
-import com.dariel25.android.pokeapp.utils.PokemonTypeUtils
+import com.dariel25.android.pokeapp.utils.ColorUtils
 
 class PokeListAdapter(
     private val context: Context,
@@ -26,15 +26,20 @@ class PokeListAdapter(
 
     override fun onBindViewHolder(viewHolder: PokemonViewHolder, i: Int) {
         val p = dataset[i]
+
+        val id = "#" + p.id
+        viewHolder.id.text = id
         viewHolder.name.text = p.name
-        viewHolder.card.setCardBackgroundColor(PokemonTypeUtils.getTypeColor(p.types))
+        viewHolder.type1.text = p.type1
+        viewHolder.type2.text = p.type2
+        viewHolder.card.setCardBackgroundColor(ColorUtils.getColor(p.color))
+
         Glide.with(context)
             .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + p.id + ".png")
             .centerCrop()
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(viewHolder.icon)
 
-        //viewHolder.fotoImagenView.setOnClickListener( );
     }
 
     override fun getItemCount(): Int {
@@ -42,8 +47,11 @@ class PokeListAdapter(
     }
 
     class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val card: CardView = itemView.findViewById<View>(R.id.card) as CardView
         val icon: ImageView = itemView.findViewById<View>(R.id.iv_icon) as ImageView
         val name: TextView = itemView.findViewById<View>(R.id.tv_name) as TextView
-        val card: CardView = itemView.findViewById<View>(R.id.card) as CardView
+        val id: TextView = itemView.findViewById<View>(R.id.tv_id) as TextView
+        val type1: TextView = itemView.findViewById<View>(R.id.tv_type1) as TextView
+        val type2: TextView = itemView.findViewById<View>(R.id.tv_type2) as TextView
     }
 }
