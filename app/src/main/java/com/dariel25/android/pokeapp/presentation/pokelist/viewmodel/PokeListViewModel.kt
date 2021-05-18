@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dariel25.android.pokeapp.data.model.Result
 import com.dariel25.android.pokeapp.domain.model.PokemonSimple
 import com.dariel25.android.pokeapp.domain.pokelist.PokemonsUseCase
-import com.dariel25.android.pokeapp.utils.ResponseState
-import com.dariel25.android.pokeapp.utils.ViewState
+import com.dariel25.android.pokeapp.presentation.models.ViewState
 import kotlinx.coroutines.launch
 
 class PokeListViewModel(private val pokemonsUseCase: PokemonsUseCase) : ViewModel() {
@@ -22,20 +22,18 @@ class PokeListViewModel(private val pokemonsUseCase: PokemonsUseCase) : ViewMode
         return mutableViewState
     }
 
-    fun firstLoad() {
-
-    }
-
     private fun fetchPokemons() {
         mutableViewState.value = ViewState.loading()
 
         viewModelScope.launch {
             when (val networkStatus = pokemonsUseCase.getPokemonList()) {
-                is ResponseState.Success -> {
+                is Result.Success -> {
                     mutableViewState.value = ViewState.success(networkStatus.data)
                 }
-                is ResponseState.Error -> mutableViewState.value = ViewState.error(networkStatus.message)
-                else -> mutableViewState.value = ViewState.error("unknown error")
+                is Result.Error -> {
+                    val msg = networkStatus.error.message ?: "Error"
+                    mutableViewState.value = ViewState.error(msg)
+                }
             }
         }
     }

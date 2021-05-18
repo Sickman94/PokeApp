@@ -5,5 +5,6 @@ data class PokemonSimple(
     val name: String = "",
     val type1: String = "",
     val type2: String = "",
-    val color: String = ""
+    val color: String = "",
+    val mega: Boolean = false
 )

@@ -1,4 +1,4 @@
-package com.dariel25.android.pokeapp.utils
+package com.dariel25.android.pokeapp.presentation.models
 
 sealed class ViewState<out T> {
 
