@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.dariel25.android.pokeapp.R
-import com.dariel25.android.pokeapp.domain.model.PokemonSimple
+import com.dariel25.android.pokeapp.data.model.PokemonSimple
 import com.dariel25.android.pokeapp.presentation.utils.StringUtils
+import java.util.*
 
 class PokeListAdapter(
     private val context: Context,

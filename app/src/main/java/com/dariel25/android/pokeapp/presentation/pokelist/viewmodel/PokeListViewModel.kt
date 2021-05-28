@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dariel25.android.pokeapp.data.model.Result
-import com.dariel25.android.pokeapp.domain.model.PokemonSimple
-import com.dariel25.android.pokeapp.domain.pokelist.PokemonsUseCase
+import com.dariel25.android.pokeapp.data.model.PokemonSimple
+import com.dariel25.android.pokeapp.domain.pokelist.PokemonListUseCase
 import com.dariel25.android.pokeapp.presentation.models.ViewState
 import kotlinx.coroutines.launch
 
-class PokeListViewModel(private val pokemonsUseCase: PokemonsUseCase) : ViewModel() {
+class PokeListViewModel(private val pokemonListUseCase: PokemonListUseCase) : ViewModel() {
 
     private val mutableViewState = MutableLiveData<ViewState<List<PokemonSimple>?>>()
 
@@ -26,7 +26,7 @@ class PokeListViewModel(private val pokemonsUseCase: PokemonsUseCase) : ViewMode
         mutableViewState.value = ViewState.loading()
 
         viewModelScope.launch {
-            when (val networkStatus = pokemonsUseCase.getPokemonList()) {
+            when (val networkStatus = pokemonListUseCase.getPokemonList()) {
                 is Result.Success -> {
                     mutableViewState.value = ViewState.success(networkStatus.data)
                 }

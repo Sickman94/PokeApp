@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dariel25.android.pokeapp.R
 import com.dariel25.android.pokeapp.databinding.ActivityPokelistBinding
-import com.dariel25.android.pokeapp.domain.model.PokemonSimple
+import com.dariel25.android.pokeapp.data.model.PokemonSimple
 import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.ViewModelFactory
 import com.dariel25.android.pokeapp.presentation.pokelist.adapter.PokeListAdapter
 import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.PokeListViewModel

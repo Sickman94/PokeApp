@@ -8,13 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitBuilder {
 
-    private const val BASE_URL = "https://raw.githubusercontent.com/Sickman94/PokeApp/main/"
-
-    fun <T> createRepositoryApi(service: Class<T>): T {
-        return getRetrofit().create(service)
+    fun <T> createRepositoryApi(service: Class<T>, baseUrl: String): T {
+        return getRetrofit(baseUrl).create(service)
     }
 
-    private fun getRetrofit() : Retrofit {
+    private fun getRetrofit(baseUrl: String) : Retrofit {
         val httpClient = OkHttpClient.Builder()
 
         if (BuildConfig.DEBUG) {
@@ -24,7 +22,7 @@ object RetrofitBuilder {
         }
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient.build())
             .build()
