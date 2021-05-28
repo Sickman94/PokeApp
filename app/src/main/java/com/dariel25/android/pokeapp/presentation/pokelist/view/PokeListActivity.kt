@@ -1,21 +1,19 @@
 package com.dariel25.android.pokeapp.presentation.pokelist.view
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dariel25.android.pokeapp.R
-import com.dariel25.android.pokeapp.databinding.ActivityPokelistBinding
 import com.dariel25.android.pokeapp.data.model.PokemonSimple
-import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.ViewModelFactory
+import com.dariel25.android.pokeapp.databinding.ActivityPokelistBinding
+import com.dariel25.android.pokeapp.presentation.models.ViewState
 import com.dariel25.android.pokeapp.presentation.pokelist.adapter.PokeListAdapter
 import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.PokeListViewModel
-import com.dariel25.android.pokeapp.presentation.models.ViewState
+import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.ViewModelFactory
 
 class PokeListActivity : AppCompatActivity() {
 
@@ -39,12 +37,18 @@ class PokeListActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
-
-        // Associate searchable configuration with the SearchView
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        (menu.findItem(R.id.search).actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        }
+        val item = menu.findItem(R.id.search)
+        val searchView = item.actionView as SearchView
+        searchView.queryHint = "Search by name or id"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                pokeListAdapter?.filter?.filter(newText)
+                return false
+            }
+        })
         return true
     }
 

@@ -1,33 +1,34 @@
 package com.dariel25.android.pokeapp.presentation.pokelist.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.dariel25.android.pokeapp.R
 import com.dariel25.android.pokeapp.data.model.PokemonSimple
 import com.dariel25.android.pokeapp.presentation.utils.StringUtils
-import java.util.*
 
 class PokeListAdapter(
     private val context: Context,
-    private val dataset: List<PokemonSimple>
-) :
-    RecyclerView.Adapter<PokeListAdapter.PokemonViewHolder>() {
+    val dataset: List<PokemonSimple>
+) : RecyclerView.Adapter<PokeListAdapter.PokemonViewHolder>(), Filterable {
+
+    private val filter = PokemonListFilter(this)
+    var filteredDataset = dataset
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, type: Int): PokemonViewHolder =
         PokemonViewHolder(LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.row_pokemon, viewGroup, false))
 
     override fun onBindViewHolder(viewHolder: PokemonViewHolder, i: Int) {
-        val p = dataset[i]
+        val p = filteredDataset[i]
 
         viewHolder.id.text = StringUtils.getIdTitle(p.id)
         viewHolder.name.text = p.name
@@ -41,9 +42,16 @@ class PokeListAdapter(
             viewHolder.type2Container.visibility = View.VISIBLE
         }
 
+        val circularProgressDrawable = CircularProgressDrawable(context)
+        circularProgressDrawable.strokeWidth = 3f
+        circularProgressDrawable.centerRadius = 20f
+        circularProgressDrawable.setColorSchemeColors(Color.WHITE)
+        circularProgressDrawable.start()
+
         Glide.with(context)
-            .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + p.id + ".png")
+            .load(IMAGE_URL + p.id + PNG)
             .centerCrop()
+            .placeholder(circularProgressDrawable)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(viewHolder.icon)
 
@@ -64,9 +72,7 @@ class PokeListAdapter(
         return context.resources.getColor(c)
     }
 
-    override fun getItemCount(): Int {
-        return dataset.size
-    }
+    override fun getItemCount(): Int = filteredDataset.size
 
     class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val card: CardView = itemView.findViewById<View>(R.id.card) as CardView
@@ -77,4 +83,11 @@ class PokeListAdapter(
         val type2: TextView = itemView.findViewById<View>(R.id.tv_type2) as TextView
         val type2Container: LinearLayout = itemView.findViewById<View>(R.id.type2_container) as LinearLayout
     }
+
+    companion object {
+        private const val IMAGE_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
+        private const val PNG = ".png"
+    }
+
+    override fun getFilter(): Filter = filter
 }
