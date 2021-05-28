@@ -2,7 +2,7 @@ package com.dariel25.android.pokeapp.presentation.pokelist.view
 
 import android.os.Bundle
 import android.view.Menu
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -10,22 +10,22 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dariel25.android.pokeapp.R
 import com.dariel25.android.pokeapp.data.model.PokemonSimple
 import com.dariel25.android.pokeapp.databinding.ActivityPokelistBinding
+import com.dariel25.android.pokeapp.presentation.core.view.BaseActivity
 import com.dariel25.android.pokeapp.presentation.models.ViewState
 import com.dariel25.android.pokeapp.presentation.pokelist.adapter.PokeListAdapter
 import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.PokeListViewModel
 import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.ViewModelFactory
 
-class PokeListActivity : AppCompatActivity() {
+class PokeListActivity : BaseActivity() {
 
     private lateinit var pokeListViewModel: PokeListViewModel
-    private lateinit var binding: ActivityPokelistBinding
     private var pokeListAdapter: PokeListAdapter? = null
+    private val binding: ActivityPokelistBinding by lazy {
+        ActivityPokelistBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityPokelistBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         binding.recyclerView.setHasFixedSize(true)
         val layoutManager = GridLayoutManager(this, 2)
@@ -33,6 +33,12 @@ class PokeListActivity : AppCompatActivity() {
 
         setupViewModel()
         setupObserver()
+    }
+
+    override fun getLayoutView() : View = binding.root
+
+    override fun onRetry() {
+        pokeListViewModel.fetchPokemons()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -75,13 +81,6 @@ class PokeListActivity : AppCompatActivity() {
             pokeListAdapter = PokeListAdapter(this, it)
             binding.recyclerView.adapter = pokeListAdapter
         }
-    }
-
-    private fun showErrorView(error: String) {
-        // Show toast
-    }
-
-    private fun showLoadingView() {
-
+        showLayoutView()
     }
 }

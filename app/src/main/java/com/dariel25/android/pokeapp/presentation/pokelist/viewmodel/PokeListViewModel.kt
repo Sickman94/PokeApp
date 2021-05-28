@@ -22,7 +22,7 @@ class PokeListViewModel(private val pokemonListUseCase: PokemonListUseCase) : Vi
         return mutableViewState
     }
 
-    private fun fetchPokemons() {
+    fun fetchPokemons() {
         mutableViewState.value = ViewState.loading()
 
         viewModelScope.launch {
