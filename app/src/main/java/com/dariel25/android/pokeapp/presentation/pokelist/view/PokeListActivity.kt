@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dariel25.android.pokeapp.R
-import com.dariel25.android.pokeapp.data.model.PokemonSimple
 import com.dariel25.android.pokeapp.databinding.ActivityPokelistBinding
+import com.dariel25.android.pokeapp.domain.model.PokemonSimple
 import com.dariel25.android.pokeapp.presentation.core.view.BaseActivity
-import com.dariel25.android.pokeapp.presentation.models.ViewState
+import com.dariel25.android.pokeapp.presentation.model.ViewState
 import com.dariel25.android.pokeapp.presentation.pokelist.adapter.PokeListAdapter
 import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.PokeListViewModel
 import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.ViewModelFactory
@@ -65,7 +64,7 @@ class PokeListActivity : BaseActivity() {
 
     private fun setupObserver() {
         pokeListViewModel.getViewStateLiveData()
-            .observe(this, Observer { updateViewStatus(it) })
+            .observe(this, { updateViewStatus(it) })
     }
 
     private fun updateViewStatus(networkState: ViewState<List<PokemonSimple>?>) {

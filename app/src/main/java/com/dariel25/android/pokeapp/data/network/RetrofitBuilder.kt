@@ -1,4 +1,4 @@
-package com.dariel25.android.pokeapp.data.api
+package com.dariel25.android.pokeapp.data.network
 
 import com.dariel25.android.pokeapp.BuildConfig
 import okhttp3.OkHttpClient

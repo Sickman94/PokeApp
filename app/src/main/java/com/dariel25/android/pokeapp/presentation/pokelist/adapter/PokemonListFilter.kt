@@ -1,7 +1,7 @@
 package com.dariel25.android.pokeapp.presentation.pokelist.adapter
 
 import android.widget.Filter
-import com.dariel25.android.pokeapp.data.model.PokemonSimple
+import com.dariel25.android.pokeapp.domain.model.PokemonSimple
 
 class PokemonListFilter(
     private val adapter: PokeListAdapter
@@ -11,22 +11,17 @@ class PokemonListFilter(
         val filterString = constraint.toString()
         val results = FilterResults()
         val list = adapter.dataset
-        val filteredList: MutableList<PokemonSimple> = ArrayList()
 
-        if (filterString.isEmpty()) {
-            results.values = list
-            results.count = list.size
+        val filteredList: List<PokemonSimple> = if (filterString.isEmpty()) {
+            list
         } else {
-            for (item in list) {
-                if (item.name.contains(filterString, true)
-                    or (item.id == filterString)
-                ) {
-                    filteredList.add(item)
-                }
+            list.filter {
+                it.name.contains(filterString, true) or (it.id == filterString)
             }
-            results.values = filteredList
-            results.count = filteredList.size
         }
+
+        results.values = filteredList
+        results.count = filteredList.size
 
         return results
     }
