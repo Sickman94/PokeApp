@@ -1,23 +1,23 @@
-package com.dariel25.android.pokeapp.presentation.pokelist.view
+package com.dariel25.android.pokeapp.presentation.pokelist
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dariel25.android.pokeapp.R
 import com.dariel25.android.pokeapp.databinding.ActivityPokelistBinding
 import com.dariel25.android.pokeapp.domain.model.PokemonSimple
-import com.dariel25.android.pokeapp.presentation.core.view.BaseActivity
+import com.dariel25.android.pokeapp.presentation.core.ui.BaseActivity
 import com.dariel25.android.pokeapp.presentation.model.ViewState
 import com.dariel25.android.pokeapp.presentation.pokelist.adapter.PokeListAdapter
-import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.PokeListViewModel
-import com.dariel25.android.pokeapp.presentation.pokelist.viewmodel.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PokeListActivity : BaseActivity() {
 
-    private lateinit var pokeListViewModel: PokeListViewModel
+    private val pokeListViewModel by viewModels<PokeListViewModel>()
     private var pokeListAdapter: PokeListAdapter? = null
     private val binding: ActivityPokelistBinding by lazy {
         ActivityPokelistBinding.inflate(layoutInflater)
@@ -30,8 +30,8 @@ class PokeListActivity : BaseActivity() {
         val layoutManager = GridLayoutManager(this, 2)
         binding.recyclerView.layoutManager = layoutManager
 
-        setupViewModel()
-        setupObserver()
+        pokeListViewModel.getViewStateLiveData()
+            .observe(this, { updateViewStatus(it) })
     }
 
     override fun getLayoutView() : View = binding.root
@@ -55,16 +55,6 @@ class PokeListActivity : BaseActivity() {
             }
         })
         return true
-    }
-
-    private fun setupViewModel() {
-        pokeListViewModel = ViewModelProvider(this, ViewModelFactory())
-            .get(PokeListViewModel::class.java)
-    }
-
-    private fun setupObserver() {
-        pokeListViewModel.getViewStateLiveData()
-            .observe(this, { updateViewStatus(it) })
     }
 
     private fun updateViewStatus(networkState: ViewState<List<PokemonSimple>?>) {

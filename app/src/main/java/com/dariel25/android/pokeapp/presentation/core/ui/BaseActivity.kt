@@ -1,4 +1,4 @@
-package com.dariel25.android.pokeapp.presentation.core.view
+package com.dariel25.android.pokeapp.presentation.core.ui
 
 import android.os.Bundle
 import android.view.View
